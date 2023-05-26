@@ -1,0 +1,124 @@
+{
+  "name": "leo-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "leo",
+  "sourceRoot": "apps/leo-ui/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-builders/custom-webpack:browser",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/leo-ui",
+        "index": "apps/leo-ui/src/index.html",
+        "main": "apps/leo-ui/src/main.single-spa.ts",
+        "polyfills": [
+          "zone.js"
+        ],
+        "tsConfig": "apps/leo-ui/tsconfig.app.json",
+        "assets": [
+          "apps/leo-ui/src/favicon.ico",
+          "apps/leo-ui/src/assets"
+        ],
+        "styles": [
+          "apps/leo-ui/src/styles.scss"
+        ],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/leo-ui/extra-webpack.config.js",
+          "libraryName": "leo-ui",
+          "libraryTarget": "umd"
+        },
+        "deployUrl": "http://localhost:4202/"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "none"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true,
+          "outputHashing": "none",
+          "fileReplacements": [
+            {
+              "replace": "apps/leo-ui/src/environments/environment.ts",
+              "with": "apps/leo-ui/src/environments/environment.development.ts"
+            }
+          ]
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-builders/custom-webpack:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "leo-ui:build:production"
+        },
+        "development": {
+          "browserTarget": "leo-ui:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "leo-ui:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/leo-ui/**/*.ts",
+          "apps/leo-ui/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "apps/leo-ui/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/web:file-server",
+      "options": {
+        "buildTarget": "leo-ui:build"
+      }
+    }
+  }
+}

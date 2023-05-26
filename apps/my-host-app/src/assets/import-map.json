@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "leo-ui": "http://localhost:4202/main.js"
+  }
+}
